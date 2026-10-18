@@ -12,6 +12,11 @@
 !.env.example
 *.local
 
+# Cloudflare Pages Functions - secretos locales (Turso + Better Auth)
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+
 # Dependencias y artefactos de compilación
 node_modules/
 dist/

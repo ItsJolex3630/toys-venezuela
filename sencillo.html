@@ -259,11 +259,45 @@ h1,h2,h3,h4{font-family:var(--fd);font-weight:700;line-height:1.05;letter-spacin
 .foot{background:var(--b2);color:#cfd6ff;padding:26px 0 40px;font-weight:700;font-size:14px}
 .foot .wrap{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center}
 .foot img{width:44px;height:44px;border-radius:12px}
+/* ===== Auth (Ingresar / Mi cuenta) ===== */
+.auth-btn{display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:999px;background:#fff;color:var(--b2);font:700 14px var(--fd);box-shadow:0 2px 8px rgba(11,28,107,.15);border:1.5px solid rgba(11,28,107,.15);transition:transform .2s,background .2s,color .2s;white-space:nowrap}
+.auth-btn:hover{transform:translateY(-1px)}
+.auth-btn.on{background:var(--b);color:#fff;border-color:var(--b2)}
+.auth-btn .auth-ic{font-size:15px;line-height:1}
+@media(max-width:640px){.auth-btn .auth-txt{display:none}.auth-btn{padding:9px 12px}}
+.auth-ov{position:fixed;inset:0;z-index:240;background:rgba(8,16,70,.55);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .3s}
+.auth-ov.on{opacity:1;pointer-events:auto}
+.auth-modal{position:fixed;z-index:245;left:50%;top:50%;width:min(430px,calc(100% - 24px));max-height:calc(100dvh - 40px);overflow:auto;background:var(--paper);border-radius:26px;padding:26px 22px;transform:translate(-50%,-46%) scale(.94);opacity:0;pointer-events:none;transition:.35s cubic-bezier(.2,.9,.3,1.2);box-shadow:var(--sh2)}
+.auth-modal.on{transform:translate(-50%,-50%) scale(1);opacity:1;pointer-events:auto}
+.auth-x{position:absolute;right:14px;top:12px;width:34px;height:34px;border-radius:50%;background:#fff;color:var(--b2);font-size:16px;box-shadow:0 3px 8px rgba(11,28,107,.18)}
+.auth-title{font:700 24px var(--fd);text-align:center;margin-bottom:14px}
+.auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:rgba(11,28,107,.07);padding:5px;border-radius:999px;margin-bottom:18px}
+.auth-tab{padding:10px;border-radius:999px;font:700 14px var(--fd);color:var(--mut)}
+.auth-tab.on{background:var(--b);color:#fff;box-shadow:0 3px 0 var(--b2)}
+.auth-view{display:none;flex-direction:column;gap:12px}
+.auth-view.on{display:flex}
+.auth-field{display:flex;flex-direction:column;gap:6px;font:700 13px var(--fd);color:var(--mut)}
+.auth-field input{padding:13px 14px;border-radius:14px;background:#fff;box-shadow:inset 0 0 0 2px var(--line);font:600 16px var(--fb);color:var(--ink)}
+.auth-field input:focus{outline:none;box-shadow:inset 0 0 0 2.5px var(--b)}
+.auth-submit{margin-top:4px}
+.auth-msg{font:700 13px var(--fb);color:var(--r);min-height:16px;text-align:center}
+.auth-msg.ok{color:var(--g)}
+.auth-user{display:flex;align-items:center;gap:12px}
+.auth-avatar{width:48px;height:48px;border-radius:50%;background:var(--y);display:grid;place-items:center;font-size:24px;flex:none}
+.auth-user b{font:700 18px var(--fd);display:block}
+.auth-user small{color:var(--mut);font:600 13px var(--fb)}
+.auth-badge{align-self:flex-start;background:var(--b2);color:#fff;font:700 13px var(--fd);padding:6px 12px;border-radius:999px}
+.auth-badge.vip{background:var(--t)}
+.auth-badge.admin{background:var(--k)}
+.auth-points{font:700 16px var(--fd);background:rgba(255,242,0,.35);padding:12px 14px;border-radius:14px;text-align:center}
+.auth-panel-link{width:100%}
+.auth-modal [hidden]{display:none!important}
 </style></head><body class="v-simple">
 <header class="hd"><div class="wrap hd-in">
   <a class="brand" href="#top"><img data-img="logo_s" alt="Toys Venezuela"><span>Toys<br>Venezuela</span></a>
   <nav><a href="#peluches">Peluches</a><a href="#apartado">Apartado</a><a href="#visitanos">Visítanos</a></nav>
   <a href="animado.html" onclick="try{localStorage.setItem('tv_version','animado')}catch(e){}" class="device-badge" title="Cambiar a versión con animaciones y efectos interactivos" style="display:inline-flex;align-items:center;gap:5px;font-family:var(--fd);font-size:12px;font-weight:700;text-decoration:none;padding:6px 12px;border-radius:999px;background:#fff;color:var(--b2);box-shadow:0 2px 8px rgba(11,28,107,.15);border:1.5px solid rgba(11,28,107,.15);margin-left:auto;transition:transform .2s;"><span style="font-size:14px;">✨</span> Modo Animado</a>
+  <button class="auth-btn" id="auth-btn" data-open-auth type="button" aria-label="Mi Cuenta"><span class="auth-ic" id="auth-ic">👤</span><span class="auth-txt" id="auth-txt">Ingresar</span></button>
   <button class="cartbtn" data-open-cart data-cartbtn aria-label="Carrito">🛒<em data-cartcount>0</em></button>
 </div></header>
 
@@ -607,4 +641,35 @@ document.readyState==='loading'?document.addEventListener('DOMContentLoaded',ini
 </script><script>document.addEventListener('DOMContentLoaded',()=>{
   document.querySelectorAll('[data-wa]').forEach(a=>a.href='https://wa.me/'+TOYS.CFG.WA+'?text='+encodeURIComponent('Hola Toys Venezuela 👋'));
 });
-</script></body></html>
+</script><div class="auth-ov" id="auth-ov"></div>
+<div class="auth-modal" id="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+  <button class="auth-x" id="auth-close" type="button" aria-label="Cerrar">✕</button>
+  <h3 class="auth-title" id="auth-title">Mi cuenta</h3>
+  <div class="auth-tabs" id="auth-tabs">
+    <button class="auth-tab on" type="button" data-auth-view="login">Iniciar sesión</button>
+    <button class="auth-tab" type="button" data-auth-view="signup">Crear cuenta</button>
+  </div>
+  <form class="auth-view on" id="auth-view-login" data-view="login" novalidate>
+    <label class="auth-field">Email<input type="email" name="email" autocomplete="email" required></label>
+    <label class="auth-field">Contraseña<input type="password" name="password" autocomplete="current-password" required></label>
+    <button class="btn btn-b auth-submit" type="submit">Entrar</button>
+    <p class="auth-msg" data-auth-msg></p>
+  </form>
+  <form class="auth-view" id="auth-view-signup" data-view="signup" novalidate>
+    <label class="auth-field">Nombre completo<input type="text" name="name" autocomplete="name" required></label>
+    <label class="auth-field">Teléfono (WhatsApp)<input type="tel" name="phone" autocomplete="tel" placeholder="0414-0000000"></label>
+    <label class="auth-field">Email<input type="email" name="email" autocomplete="email" required></label>
+    <label class="auth-field">Contraseña<input type="password" name="password" autocomplete="new-password" minlength="8" required></label>
+    <button class="btn btn-y auth-submit" type="submit">Crear cuenta</button>
+    <p class="auth-msg" data-auth-msg></p>
+  </form>
+  <div class="auth-view" id="auth-view-account" data-view="account">
+    <div class="auth-user"><span class="auth-avatar" id="auth-avatar">👤</span><div><b id="auth-name">—</b><small id="auth-email">—</small></div></div>
+    <p class="auth-badge" id="auth-role">Cliente Regular</p>
+    <p class="auth-points">⭐ <b id="auth-points">0</b> Puntos</p>
+    <a class="btn btn-y auth-panel-link" id="auth-panel-link" href="admin/index.html" hidden>👑 Panel Admin</a>
+    <button class="btn btn-o auth-submit" id="auth-logout" type="button">Cerrar sesión</button>
+    <p class="auth-msg" data-auth-msg></p>
+  </div>
+</div>
+<script src="auth-client.js" defer></script></body></html>
