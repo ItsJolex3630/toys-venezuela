@@ -19,6 +19,11 @@ El repositorio contiene soporte nativo para dos experiencias complementarias:
 - **Proyecto:** `toys-venezuela`
 - **Dominio Pages:** `https://toys-venezuela.pages.dev`
 - **Ramas:** `main`
+- **Modalidad:** Direct Upload
+- **Comando de despliegue:**
+  ```bash
+  npx wrangler pages deploy . --project-name toys-venezuela --branch main
+  ```
 
 ## 🔒 Seguridad
 - `.gitignore` estricto con exclusión total de variables `.env*` y datos sensibles.
